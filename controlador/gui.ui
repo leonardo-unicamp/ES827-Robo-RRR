@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>631</width>
-    <height>394</height>
+    <width>786</width>
+    <height>496</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -18,14 +18,14 @@
   </property>
   <property name="minimumSize">
    <size>
-    <width>631</width>
-    <height>394</height>
+    <width>0</width>
+    <height>0</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
-    <width>631</width>
-    <height>394</height>
+    <width>10000000</width>
+    <height>10000000</height>
    </size>
   </property>
   <property name="windowTitle">
@@ -41,8 +41,8 @@
      <rect>
       <x>10</x>
       <y>10</y>
-      <width>141</width>
-      <height>181</height>
+      <width>191</width>
+      <height>211</height>
      </rect>
     </property>
     <property name="title">
@@ -51,10 +51,10 @@
     <widget class="QSplitter" name="splitter_2">
      <property name="geometry">
       <rect>
-       <x>60</x>
+       <x>80</x>
        <y>20</y>
-       <width>21</width>
-       <height>141</height>
+       <width>31</width>
+       <height>171</height>
       </rect>
      </property>
      <property name="orientation">
@@ -74,10 +74,10 @@
     <widget class="QSplitter" name="splitter_3">
      <property name="geometry">
       <rect>
-       <x>100</x>
+       <x>140</x>
        <y>20</y>
-       <width>21</width>
-       <height>141</height>
+       <width>31</width>
+       <height>171</height>
       </rect>
      </property>
      <property name="orientation">
@@ -99,8 +99,8 @@
       <rect>
        <x>20</x>
        <y>20</y>
-       <width>21</width>
-       <height>141</height>
+       <width>31</width>
+       <height>171</height>
       </rect>
      </property>
      <property name="orientation">
@@ -122,9 +122,9 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>200</y>
-      <width>141</width>
-      <height>186</height>
+      <y>230</y>
+      <width>191</width>
+      <height>251</height>
      </rect>
     </property>
     <property name="title">
@@ -135,8 +135,8 @@
       <rect>
        <x>25</x>
        <y>20</y>
-       <width>106</width>
-       <height>21</height>
+       <width>151</width>
+       <height>31</height>
       </rect>
      </property>
     </widget>
@@ -145,29 +145,19 @@
       <rect>
        <x>10</x>
        <y>20</y>
-       <width>10</width>
-       <height>20</height>
+       <width>16</width>
+       <height>31</height>
       </rect>
      </property>
      <property name="text">
       <string>X</string>
      </property>
     </widget>
-    <widget class="QDoubleSpinBox" name="doubleSpinBox_2">
-     <property name="geometry">
-      <rect>
-       <x>25</x>
-       <y>50</y>
-       <width>106</width>
-       <height>21</height>
-      </rect>
-     </property>
-    </widget>
     <widget class="QLabel" name="label_5">
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>50</y>
+       <y>65</y>
        <width>11</width>
        <height>20</height>
       </rect>
@@ -176,21 +166,11 @@
       <string>Y</string>
      </property>
     </widget>
-    <widget class="QDoubleSpinBox" name="doubleSpinBox_3">
-     <property name="geometry">
-      <rect>
-       <x>25</x>
-       <y>80</y>
-       <width>106</width>
-       <height>21</height>
-      </rect>
-     </property>
-    </widget>
     <widget class="QLabel" name="label_6">
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>80</y>
+       <y>110</y>
        <width>11</width>
        <height>20</height>
       </rect>
@@ -203,22 +183,9 @@
      <property name="geometry">
       <rect>
        <x>15</x>
-       <y>155</y>
-       <width>51</width>
-       <height>21</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>PushButton</string>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="pushButton_2">
-     <property name="geometry">
-      <rect>
-       <x>75</x>
-       <y>155</y>
-       <width>51</width>
-       <height>21</height>
+       <y>210</y>
+       <width>71</width>
+       <height>31</height>
       </rect>
      </property>
      <property name="text">
@@ -228,9 +195,9 @@
     <widget class="QRadioButton" name="radioButton">
      <property name="geometry">
       <rect>
-       <x>20</x>
-       <y>110</y>
-       <width>101</width>
+       <x>30</x>
+       <y>155</y>
+       <width>131</width>
        <height>16</height>
       </rect>
      </property>
@@ -241,9 +208,9 @@
     <widget class="QRadioButton" name="radioButton_2">
      <property name="geometry">
       <rect>
-       <x>20</x>
-       <y>130</y>
-       <width>101</width>
+       <x>30</x>
+       <y>175</y>
+       <width>131</width>
        <height>16</height>
       </rect>
      </property>
@@ -251,14 +218,47 @@
       <string>Trajetória de 5ª ordem</string>
      </property>
     </widget>
+    <widget class="QDoubleSpinBox" name="doubleSpinBox_2">
+     <property name="geometry">
+      <rect>
+       <x>25</x>
+       <y>60</y>
+       <width>151</width>
+       <height>31</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QDoubleSpinBox" name="doubleSpinBox_3">
+     <property name="geometry">
+      <rect>
+       <x>25</x>
+       <y>105</y>
+       <width>151</width>
+       <height>31</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_2">
+     <property name="geometry">
+      <rect>
+       <x>95</x>
+       <y>210</y>
+       <width>71</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>PushButton</string>
+     </property>
+    </widget>
    </widget>
    <widget class="matplotlibwidget" name="widget" native="true">
     <property name="geometry">
      <rect>
-      <x>165</x>
+      <x>215</x>
       <y>15</y>
-      <width>456</width>
-      <height>371</height>
+      <width>551</width>
+      <height>471</height>
      </rect>
     </property>
    </widget>

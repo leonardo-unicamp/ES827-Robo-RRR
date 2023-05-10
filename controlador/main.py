@@ -7,7 +7,7 @@ class DataAnalyzer(QMainWindow):
     
     def __init__(self):
         QMainWindow.__init__(self)
-        loadUi("./gui.ui", self)
+        loadUi("./controlador/gui.ui", self)
         self.setWindowTitle("Controlador do Robô")
 
 app = QApplication([])
