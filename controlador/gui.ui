@@ -60,12 +60,18 @@
      <property name="orientation">
       <enum>Qt::Vertical</enum>
      </property>
-     <widget class="QLabel" name="label_2">
+     <widget class="QLabel" name="label_theta2">
       <property name="text">
-       <string>360,0</string>
+       <string>0,0</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
       </property>
      </widget>
-     <widget class="QSlider" name="verticalSlider_2">
+     <widget class="QSlider" name="slider_theta2">
+      <property name="maximum">
+       <number>360</number>
+      </property>
       <property name="orientation">
        <enum>Qt::Vertical</enum>
       </property>
@@ -83,12 +89,21 @@
      <property name="orientation">
       <enum>Qt::Vertical</enum>
      </property>
-     <widget class="QLabel" name="label_3">
+     <widget class="QLabel" name="label_theta3">
       <property name="text">
-       <string>360,0</string>
+       <string>0,0</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
       </property>
      </widget>
-     <widget class="QSlider" name="verticalSlider_3">
+     <widget class="QSlider" name="slider_theta3">
+      <property name="maximum">
+       <number>360</number>
+      </property>
+      <property name="pageStep">
+       <number>1</number>
+      </property>
       <property name="orientation">
        <enum>Qt::Vertical</enum>
       </property>
@@ -106,12 +121,18 @@
      <property name="orientation">
       <enum>Qt::Vertical</enum>
      </property>
-     <widget class="QLabel" name="label">
+     <widget class="QLabel" name="label_theta1">
       <property name="text">
-       <string>360,0</string>
+       <string>0,0</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
       </property>
      </widget>
-     <widget class="QSlider" name="verticalSlider">
+     <widget class="QSlider" name="slider_theta1">
+      <property name="maximum">
+       <number>360</number>
+      </property>
       <property name="orientation">
        <enum>Qt::Vertical</enum>
       </property>
@@ -252,7 +273,7 @@
      </property>
     </widget>
    </widget>
-   <widget class="matplotlibwidget" name="widget" native="true">
+   <widget class="matplotlibwidget" name="mpl_widget" native="true">
     <property name="geometry">
      <rect>
       <x>215</x>
