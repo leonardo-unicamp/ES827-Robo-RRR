@@ -119,3 +119,70 @@ class Robot:
         z = [0, T_01[2, 3], T_02[2, 3], T_03[2, 3]]
 
         return x, y, z
+
+    def inv_time_cubic_trajectory(self, ti: float, tf: float) -> None:
+        timeMatrix = sym.Matrix([[1, ti, ti**2,     ti**3],
+                                 [0,  1,  2*ti, 3*(ti**2)],
+                                 [1, tf, tf**2,     tf**3],
+                                 [0,  1,  2*tf, 3*(tf**2)]])
+        return timeMatrix.inv()
+    
+    def create_trajectory(self, trajectory: dict, rate: float):
+
+        time    = []
+        joint_1 = []
+        joint_2 = []
+        joint_3 = []
+
+        for i in range(1, len(trajectory["j1"])):
+
+            # Time to execute trajectory
+            ti = trajectory["t"][i-1]
+            tf = trajectory["t"][i]
+
+            # Speed in target points
+            vi = trajectory["vi"][i-1]
+            vf = trajectory["vf"][i-1]
+
+            # Set time vector
+            delta_time = tf - ti
+            number_of_points = int(delta_time*rate)
+            t = np.linspace(ti, tf, number_of_points)
+            time += list(t)
+            
+            # Get the inverse of trajectory time matrix
+            time_inv = self.inv_time_cubic_trajectory(ti, tf)
+
+            for key in ["j1", "j2", "j3"]:
+
+                # Move points
+                qi = trajectory[key][i-1]
+                qf = trajectory[key][i]
+
+                # Create the cubic trajectory
+                trajectory_matrix = sym.Matrix([qi, vi, qf, vf])
+                a0, a1, a2, a3 = list(time_inv*trajectory_matrix)
+
+                if key == "j1":
+                    joint_1 += list(a0 + a1*t + a2*(t**2) + a3*(t**3))
+                elif key == "j2":
+                    joint_2 += list(a0 + a1*t + a2*(t**2) + a3*(t**3))
+                else:
+                    joint_3 += list(a0 + a1*t + a2*(t**2) + a3*(t**3))
+
+        return time, joint_1, joint_2, joint_3
+                    
+if __name__ == "__main__":
+    r = Robot(2,2,2)
+
+    trajectory = {
+            "j1": [0, 0], "j2": [0, 1.441244159646074], "j3": [0, -1.955193101290536], 
+            "vi": [0, 0], "vf": [0, 0, 0], 
+            "t": [0, 2]
+        }
+    
+    t, j1, j2, j3 = r.create_trajectory(trajectory, 100)
+
+    import matplotlib.pyplot as plt
+    plt.plot(t, j2)
+    plt.show()

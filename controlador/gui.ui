@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>786</width>
-    <height>496</height>
+    <width>1025</width>
+    <height>494</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -32,8 +32,7 @@
    <string>MainWindow</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">background-color: white;
-</string>
+   <string notr="true"/>
   </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QGroupBox" name="groupBox">
@@ -42,125 +41,157 @@
       <x>10</x>
       <y>10</y>
       <width>191</width>
-      <height>211</height>
+      <height>176</height>
      </rect>
     </property>
     <property name="title">
-     <string>Cinemática Direta</string>
+     <string>Joystick</string>
     </property>
-    <widget class="QSplitter" name="splitter_2">
+    <widget class="QPushButton" name="btn_joy_up">
      <property name="geometry">
       <rect>
-       <x>80</x>
-       <y>20</y>
-       <width>31</width>
-       <height>171</height>
+       <x>55</x>
+       <y>35</y>
+       <width>36</width>
+       <height>36</height>
       </rect>
      </property>
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
+     <property name="font">
+      <font>
+       <pointsize>10</pointsize>
+       <weight>50</weight>
+       <italic>false</italic>
+       <bold>false</bold>
+       <kerning>false</kerning>
+      </font>
      </property>
-     <widget class="QLabel" name="label_theta2">
-      <property name="text">
-       <string>0,0</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignCenter</set>
-      </property>
-     </widget>
-     <widget class="QSlider" name="slider_theta2">
-      <property name="maximum">
-       <number>360</number>
-      </property>
-      <property name="orientation">
-       <enum>Qt::Vertical</enum>
-      </property>
-     </widget>
+     <property name="text">
+      <string>↑</string>
+     </property>
     </widget>
-    <widget class="QSplitter" name="splitter_3">
+    <widget class="QPushButton" name="btn_joy_down">
      <property name="geometry">
       <rect>
-       <x>140</x>
-       <y>20</y>
-       <width>31</width>
-       <height>171</height>
+       <x>55</x>
+       <y>115</y>
+       <width>36</width>
+       <height>36</height>
       </rect>
      </property>
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
+     <property name="font">
+      <font>
+       <pointsize>10</pointsize>
+       <weight>50</weight>
+       <italic>false</italic>
+       <bold>false</bold>
+       <kerning>false</kerning>
+      </font>
      </property>
-     <widget class="QLabel" name="label_theta3">
-      <property name="text">
-       <string>0,0</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignCenter</set>
-      </property>
-     </widget>
-     <widget class="QSlider" name="slider_theta3">
-      <property name="maximum">
-       <number>360</number>
-      </property>
-      <property name="pageStep">
-       <number>1</number>
-      </property>
-      <property name="orientation">
-       <enum>Qt::Vertical</enum>
-      </property>
-     </widget>
+     <property name="text">
+      <string>↓</string>
+     </property>
     </widget>
-    <widget class="QSplitter" name="splitter">
+    <widget class="QPushButton" name="btn_joy_left">
      <property name="geometry">
       <rect>
-       <x>20</x>
-       <y>20</y>
-       <width>31</width>
-       <height>171</height>
+       <x>95</x>
+       <y>75</y>
+       <width>36</width>
+       <height>36</height>
       </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>10</pointsize>
+       <weight>50</weight>
+       <italic>false</italic>
+       <bold>false</bold>
+       <kerning>false</kerning>
+      </font>
+     </property>
+     <property name="text">
+      <string>→</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="btn_joy_right">
+     <property name="geometry">
+      <rect>
+       <x>15</x>
+       <y>75</y>
+       <width>36</width>
+       <height>36</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>10</pointsize>
+       <weight>50</weight>
+       <italic>false</italic>
+       <bold>false</bold>
+       <kerning>false</kerning>
+      </font>
+     </property>
+     <property name="text">
+      <string>←</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="btn_joy_claw">
+     <property name="geometry">
+      <rect>
+       <x>55</x>
+       <y>75</y>
+       <width>36</width>
+       <height>36</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>10</pointsize>
+       <weight>50</weight>
+       <italic>false</italic>
+       <bold>false</bold>
+       <kerning>false</kerning>
+      </font>
+     </property>
+     <property name="text">
+      <string>G</string>
+     </property>
+    </widget>
+    <widget class="QSlider" name="sld_joy_z">
+     <property name="geometry">
+      <rect>
+       <x>150</x>
+       <y>15</y>
+       <width>22</width>
+       <height>151</height>
+      </rect>
+     </property>
+     <property name="maximum">
+      <number>6</number>
+     </property>
+     <property name="singleStep">
+      <number>1</number>
      </property>
      <property name="orientation">
       <enum>Qt::Vertical</enum>
      </property>
-     <widget class="QLabel" name="label_theta1">
-      <property name="text">
-       <string>0,0</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignCenter</set>
-      </property>
-     </widget>
-     <widget class="QSlider" name="slider_theta1">
-      <property name="maximum">
-       <number>360</number>
-      </property>
-      <property name="orientation">
-       <enum>Qt::Vertical</enum>
-      </property>
-     </widget>
+     <property name="tickInterval">
+      <number>100</number>
+     </property>
     </widget>
    </widget>
    <widget class="QGroupBox" name="groupBox_2">
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>230</y>
+      <y>195</y>
       <width>191</width>
-      <height>251</height>
+      <height>191</height>
      </rect>
     </property>
     <property name="title">
      <string>Cinemática Inversa</string>
     </property>
-    <widget class="QDoubleSpinBox" name="doubleSpinBox">
-     <property name="geometry">
-      <rect>
-       <x>25</x>
-       <y>20</y>
-       <width>151</width>
-       <height>31</height>
-      </rect>
-     </property>
-    </widget>
     <widget class="QLabel" name="label_4">
      <property name="geometry">
       <rect>
@@ -200,87 +231,324 @@
       <string>Z</string>
      </property>
     </widget>
-    <widget class="QPushButton" name="pushButton">
+    <widget class="QPushButton" name="btn_inverse_move">
      <property name="geometry">
       <rect>
-       <x>15</x>
-       <y>210</y>
+       <x>60</x>
+       <y>145</y>
        <width>71</width>
        <height>31</height>
       </rect>
      </property>
      <property name="text">
-      <string>PushButton</string>
+      <string>Mover</string>
      </property>
     </widget>
-    <widget class="QRadioButton" name="radioButton">
+    <widget class="QLineEdit" name="le_set_x">
      <property name="geometry">
       <rect>
        <x>30</x>
-       <y>155</y>
-       <width>131</width>
-       <height>16</height>
+       <y>25</y>
+       <width>106</width>
+       <height>26</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QLabel" name="lb_x">
+     <property name="geometry">
+      <rect>
+       <x>146</x>
+       <y>25</y>
+       <width>36</width>
+       <height>26</height>
       </rect>
      </property>
      <property name="text">
-      <string>Trajetória de 3ª ordem</string>
+      <string>000.00</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
     </widget>
-    <widget class="QRadioButton" name="radioButton_2">
+    <widget class="QLineEdit" name="le_set_y">
      <property name="geometry">
       <rect>
        <x>30</x>
-       <y>175</y>
-       <width>131</width>
-       <height>16</height>
+       <y>65</y>
+       <width>106</width>
+       <height>26</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QLabel" name="lb_y">
+     <property name="geometry">
+      <rect>
+       <x>146</x>
+       <y>65</y>
+       <width>36</width>
+       <height>26</height>
       </rect>
      </property>
      <property name="text">
-      <string>Trajetória de 5ª ordem</string>
+      <string>000.00</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
     </widget>
-    <widget class="QDoubleSpinBox" name="doubleSpinBox_2">
+    <widget class="QLabel" name="lb_z">
      <property name="geometry">
       <rect>
-       <x>25</x>
-       <y>60</y>
-       <width>151</width>
-       <height>31</height>
-      </rect>
-     </property>
-    </widget>
-    <widget class="QDoubleSpinBox" name="doubleSpinBox_3">
-     <property name="geometry">
-      <rect>
-       <x>25</x>
+       <x>146</x>
        <y>105</y>
-       <width>151</width>
-       <height>31</height>
-      </rect>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="pushButton_2">
-     <property name="geometry">
-      <rect>
-       <x>95</x>
-       <y>210</y>
-       <width>71</width>
-       <height>31</height>
+       <width>36</width>
+       <height>26</height>
       </rect>
      </property>
      <property name="text">
-      <string>PushButton</string>
+      <string>000.00</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="le_set_z">
+     <property name="geometry">
+      <rect>
+       <x>30</x>
+       <y>105</y>
+       <width>106</width>
+       <height>26</height>
+      </rect>
      </property>
     </widget>
    </widget>
    <widget class="matplotlibwidget" name="mpl_widget" native="true">
     <property name="geometry">
      <rect>
-      <x>215</x>
-      <y>15</y>
+      <x>465</x>
+      <y>10</y>
       <width>551</width>
       <height>471</height>
      </rect>
+    </property>
+   </widget>
+   <widget class="QGroupBox" name="groupBox_3">
+    <property name="geometry">
+     <rect>
+      <x>210</x>
+      <y>10</y>
+      <width>246</width>
+      <height>476</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>Trajetória</string>
+    </property>
+    <widget class="QPushButton" name="btn_trajectory_add">
+     <property name="geometry">
+      <rect>
+       <x>130</x>
+       <y>90</y>
+       <width>51</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Add</string>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="le_vi">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>45</y>
+       <width>111</width>
+       <height>26</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>0.00</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>25</y>
+       <width>116</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Velocidade Inicial (m/s)</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_2">
+     <property name="geometry">
+      <rect>
+       <x>130</x>
+       <y>25</y>
+       <width>106</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Velocidade Final (m/s)</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="btn_trajectory_remove">
+     <property name="geometry">
+      <rect>
+       <x>185</x>
+       <y>90</y>
+       <width>51</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Del</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_8">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>75</y>
+       <width>111</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Tempo (s)</string>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="le_ti">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>95</y>
+       <width>111</width>
+       <height>26</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>0.00</string>
+     </property>
+    </widget>
+    <widget class="QTextBrowser" name="browser_trajectory">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>135</y>
+       <width>226</width>
+       <height>291</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="btn_see_trajectory">
+     <property name="geometry">
+      <rect>
+       <x>15</x>
+       <y>435</y>
+       <width>106</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Ver Trajetória</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="btn_trajectory_run">
+     <property name="geometry">
+      <rect>
+       <x>130</x>
+       <y>435</y>
+       <width>106</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Executar</string>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QGroupBox" name="groupBox_4">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>395</y>
+      <width>191</width>
+      <height>91</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>Garra</string>
+    </property>
+    <widget class="QLineEdit" name="le_claw">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>40</y>
+       <width>81</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>0.00</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_3">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>20</y>
+       <width>91</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Fechamento (%)</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_7">
+     <property name="geometry">
+      <rect>
+       <x>100</x>
+       <y>40</y>
+       <width>41</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>TextLabel</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="btn_move_2">
+     <property name="geometry">
+      <rect>
+       <x>150</x>
+       <y>40</y>
+       <width>36</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Set</string>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QLineEdit" name="le_vf">
+    <property name="geometry">
+     <rect>
+      <x>340</x>
+      <y>55</y>
+      <width>106</width>
+      <height>26</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>0.00</string>
     </property>
    </widget>
   </widget>
