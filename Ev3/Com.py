@@ -8,6 +8,8 @@ class Com:
 
     def receive(self, buff_size):
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+            # https://stackoverflow.com/questions/41208720/python-sockets-not-really-closing
+            s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
             s.bind((self.host, self.port))
             s.listen()
             while True:

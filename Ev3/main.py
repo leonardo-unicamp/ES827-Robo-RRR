@@ -44,6 +44,8 @@ def main() -> None:
         except ParseError as error:
             print(repr(error))  # Might be slow
             pass  # Ignore errors in communincation
+        except KeyboardInterrupt:
+            break
 
 
 if __name__ == "__main__":
