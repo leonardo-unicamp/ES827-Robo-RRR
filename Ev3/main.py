@@ -5,8 +5,7 @@ from time import time
 from Com import Com
 from Robot import Robot
 
-HOST = "localhost"
-HOST = "10.42.0.3"  # EV3 default ip for some reason
+HOST = "192.168.137.4"  # EV3 default ip for some reason
 PORT = 12345
 
 

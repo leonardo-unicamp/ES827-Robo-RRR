@@ -12,24 +12,32 @@ import numpy as np
 import sympy as sym
 import pandas as pd
 
+from calc import get_q
+
 # Import functions
 from numpy import sin, cos, sqrt
 
 class Robot:
 
-    def __init__(self, d1, a2, a3):
-        # Robot dimensions
-        self.d1 = d1
-        self.a2 = a2
-        self.a3 = a3
+    def __init__(self):
+
+        b1 = np.arctan(148/28)
+        b2 = np.sqrt(148**2 + 28**2)
+        b3 = np.arctan(48/152)
+        b4 = np.sqrt(48**2 + 152**2)
 
         # Denavit-Hartenberg Table
+        t1, t2, t3 = sym.symbols("theta_1, theta_2, theta_3")
         self.denavit_hartenberg = pd.DataFrame(data={
-            "a":     [0, a2, a3],
+            "a":     [0, b2, b4],
             "alpha": [np.pi/2, 0, 0],
-            "d":     [d1, 0, 0],
-            "theta": sym.symbols("theta_1, theta_2, theta_3")
+            "d":     [165, 0, 0],
+            "theta": [t1, t2 + b1, t3+b3-b1]
         })
+
+        self.last_joint_position = np.array([0, 0, 0])
+
+        print(self.forward_kinematics(0,0,0))
 
     def inverse_kinematics(self, x: float, y: float, z: float) -> np.array:
 
@@ -47,17 +55,11 @@ class Robot:
                 angles (in radians) required to reach the target point.
         """
 
-        # Calculate the joint angles
-        theta_1 = math.atan2(y, x)
-        r2 = x**2 + y**2 + (z-self.d1)**2
-        cos_theta_3 = (r2 - self.a2**2 - self.a3**2)/(2 * self.a2 * self.a3)
-        theta_3 = (-1)*math.atan2(sqrt(1-cos_theta_3**2), cos_theta_3)
-        temp1 = math.atan2((z - self.d1), sqrt(x**2 + y**2))
-        temp2 = math.atan2((self.a3 * sin(theta_3)), (self.a2 + self.a3*cos(theta_3)))
-        theta_2 = temp1 - temp2
+        new_joints = get_q(np.array([x, y, z]), self.last_joint_position)
+        self.last_joint_position = new_joints
 
         # Return the joint angles as a tuple
-        return np.array((theta_1, theta_2, theta_3))
+        return new_joints
 
     def get_homogeneous_matrices(self, denavit_hartenberg: pd.DataFrame) -> list:
 
@@ -173,16 +175,4 @@ class Robot:
         return time, joint_1, joint_2, joint_3
                     
 if __name__ == "__main__":
-    r = Robot(2,2,2)
-
-    trajectory = {
-            "j1": [0, 0], "j2": [0, 1.441244159646074], "j3": [0, -1.955193101290536], 
-            "vi": [0, 0], "vf": [0, 0, 0], 
-            "t": [0, 2]
-        }
-    
-    t, j1, j2, j3 = r.create_trajectory(trajectory, 100)
-
-    import matplotlib.pyplot as plt
-    plt.plot(t, j2)
-    plt.show()
+    r = Robot()

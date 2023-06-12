@@ -49,7 +49,6 @@ class matplotlibwidget(QWidget):
         # Basic plot configurations
         self.canvas = FC(figure)
         self.canvas.axes = self.canvas.figure.add_subplot(111, projection="3d")
-        self.canvas.axes.ticklabel_format(axis="y", style="sci")
 
         vertical_layout = QVBoxLayout()
         vertical_layout.addWidget(NavigationToolbar(self.canvas, self))
@@ -82,6 +81,8 @@ class matplotlibwidget(QWidget):
         self.canvas.axes.set_xlim(-300, 300)
         self.canvas.axes.set_ylim(-300, 300)
         self.canvas.axes.set_zlim(0, 300)
+        self.canvas.axes.tick_params(left = False, right = False, 
+            labelleft = False, labelbottom = False, bottom = False)
 
         self.updateDraw()
 
