@@ -447,7 +447,7 @@
       <rect>
        <x>10</x>
        <y>255</y>
-       <width>106</width>
+       <width>76</width>
        <height>31</height>
       </rect>
      </property>
@@ -458,9 +458,9 @@
     <widget class="QPushButton" name="btn_trajectory_run">
      <property name="geometry">
       <rect>
-       <x>125</x>
+       <x>90</x>
        <y>255</y>
-       <width>106</width>
+       <width>71</width>
        <height>31</height>
       </rect>
      </property>
@@ -496,6 +496,19 @@
        <width>111</width>
        <height>26</height>
       </rect>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="btn_trajectory_run_2">
+     <property name="geometry">
+      <rect>
+       <x>165</x>
+       <y>255</y>
+       <width>71</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Salvar</string>
      </property>
     </widget>
    </widget>

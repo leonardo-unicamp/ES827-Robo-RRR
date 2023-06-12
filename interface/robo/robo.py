@@ -6,6 +6,11 @@ import pandas as pd
 # Function to inverse kinematics
 from robo.calc import get_q
 
+# Robot communication
+from time import sleep
+from math import degrees
+from robo.ev3_client import Ev3Client
+
 class Robo:
 
 
@@ -25,6 +30,9 @@ class Robo:
         self.transformation_j1 = A1
         self.transformation_j2 = A1*A2
         self.transformation_j3 = A1*A2*A3
+
+        # Connect with Ev3
+        # self.ev3 = Ev3Client()
 
         # Store a trajectory
         self.trajectory = {
@@ -121,14 +129,18 @@ class Robo:
 
     def get_cubic_trajectory(self, trajectory: dict, rate: float):
 
-        time       = []
-        j1, j2, j3 = [], [], []
+        """
+            Calculate a cubic trajectory
+        """
+
+        time = []
+        j1, j2, j3, claw = [], [], [], []
 
         # Iterates over all points
         for i in range(1, len(trajectory["j1"])):
 
             # Time to execute the trajectory
-            ti, tf = trajectory["t"][i-1], trajectory["t"][i]
+            ti, tf = trajectory["time"][i-1], trajectory["time"][i]
 
             # Speed in target points
             si, sf =  trajectory["si"][i], trajectory["sf"][i]
@@ -143,7 +155,7 @@ class Robo:
                                      [1, tf, tf**2,     tf**3],
                                      [0,  1,  2*tf, 3*(tf**2)]]).inv()
             
-            for key in ["j1", "j2", "j3"]:
+            for key in ["j1", "j2", "j3", "claw"]:
 
                 # Move points
                 qi = trajectory[key][i-1]
@@ -157,10 +169,63 @@ class Robo:
                     j1 += list(a0 + a1*t + a2*(t**2) + a3*(t**3))
                 elif key == "j2":
                     j2 += list(a0 + a1*t + a2*(t**2) + a3*(t**3))
-                else:
+                elif key == "j3":
                     j3 += list(a0 + a1*t + a2*(t**2) + a3*(t**3))
+                elif key == "claw":
+                    claw += list(a0 + a1*t + a2*(t**2) + a3*(t**3))
 
-        return time, j1, j2, j3
+        return time, j1, j2, j3, claw
+    
+
+    def go_to(self, target_j1: float, target_j2: float, target_j3: float, target_claw: float):
+
+        """
+            Calculate the trajectory from the current point to another
+            knowing the joints positions
+        """
+        
+        # Get current joint angles
+        j1, j2, j3 = self.get_joint_angles()
+
+        # Get current claw angle
+        claw = self.get_claw_opening()
+
+        trajectory = {
+            "j1": [j1, target_j1], "j2": [j2, target_j2], "j3": [j3, target_j3],
+            "si": [0, 0], "sf": [0, 0], "claw": [claw, target_claw], "time": [0, 3]
+        }
+
+        # Get trajectory to the specified point
+        _, j1, j2, j3, claw = self.get_cubic_trajectory(trajectory, 15)
+
+        return j1, j2, j3, claw
+    
+
+    def move_robot(self, j1: list, j2: list, j3: list, claw: list, callback):
+        
+        """
+            Send commands to Ev3 to execute the trajectory
+        """
+
+        # Iterates over all points
+        for i in range(len(j1)):
+
+            # Set position to Ev3 motors
+            # self.ev3.set_position(
+            #   degrees(j1[i]), 
+            #   degrees(j2[i]), 
+            #   degrees(j3[i]), 
+            #   degrees(claw[i])
+            # )
+            
+            # Update robot parameters
+            self.set_joint_angles(j1[i], j2[i], j3[i])
+            self.set_claw_opening(claw[i])
+
+            print("oi")
+
+            #callback()
+            sleep(0.06)
     
 
     def get_xyz_position(self):
@@ -191,6 +256,11 @@ class Robo:
     
     def get_claw_opening(self):
         return self.claw_opening
+    
+
+    def set_claw_opening(self, value: float):
+        if value <= np.pi/2:
+            self.claw_opening = value
     
     def get_all_joints_position(self):
         return self.all_joints_position

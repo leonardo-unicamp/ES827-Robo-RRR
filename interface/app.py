@@ -90,7 +90,8 @@ class GuiRobo(QMainWindow):
         elif button == "down_z":
             self.robot.set_xyz_position(x, y, z - step)
         elif button == "initial":
-            self.robot.set_joint_angles(0, 0, 0)
+            j1, j2, j3, claw = self.robot.go_to(0, 0, 0, 0)
+            self.robot.move_robot(j1, j2, j3, claw, self.update_simulation)
 
         # Update the simulation
         self.update_simulation()

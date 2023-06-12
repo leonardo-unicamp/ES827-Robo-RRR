@@ -14,24 +14,6 @@ from datetime import datetime, timedelta
 
 matplotlib.use('Qt5Agg')
 
-class Animation(QObject):
-    
-    finished = pyqtSignal()
-
-    def __init__(self, x, y, z, rate, plot):
-        super().__init__()
-        self.x = x
-        self.y = y
-        self.z = z
-        self.rate = rate
-        self.plot = plot
-
-    def run(self):
-        for i in range(len(self.x)):
-            self.plot(self.x[i], self.y[i], self.z[i])
-            time.sleep(0.01)
-        self.finished.emit()
-
 class matplotlibwidget(QWidget):
     
     def __init__(self, parent=None):
@@ -58,17 +40,6 @@ class matplotlibwidget(QWidget):
         # Data plotted
         self.lines = []
         self.graphs = {}
-    
-    #
-    def animation(self, x: list, y: list, z: list, rate: float) -> None:
-        self.thread = QThread()
-        self.worker = Animation(x, y, z, rate, self.plot)
-        self.worker.moveToThread(self.thread)
-        self.thread.started.connect(self.worker.run)
-        self.worker.finished.connect(self.thread.quit)
-        self.worker.finished.connect(self.worker.deleteLater)
-        self.thread.finished.connect(self.thread.deleteLater)
-        self.thread.start()
 
     #
     def plot(self, x: list, y: list, z: list) -> None:
