@@ -7,6 +7,8 @@ import pandas as pd
 from robo.calc import get_q
 
 # Robot communication
+import threading
+from datetime import datetime
 from time import sleep
 from math import degrees
 from robo.ev3_client import Ev3Client
@@ -33,6 +35,7 @@ class Robo:
 
         # Connect with Ev3
         # self.ev3 = Ev3Client()
+        self.is_moving = False
 
         # Store a trajectory
         self.trajectory = {
@@ -65,9 +68,9 @@ class Robo:
         T3 = self.transformation_j3.subs({j1_s: j1, j2_s: j2, j3_s: j3})
 
         # Get (x,y,z) joints position
-        x = [0, T1[0, 3], T2[0, 3], T3[0, 3]]
-        y = [0, T1[1, 3], T2[1, 3], T3[1, 3]]
-        z = [0, T1[2, 3], T2[2, 3], T3[2, 3]]
+        x = [0, float(T1[0, 3]), float(T2[0, 3]), float(T3[0, 3])]
+        y = [0, float(T1[1, 3]), float(T2[1, 3]), float(T3[1, 3])]
+        z = [0, float(T1[2, 3]), float(T2[2, 3]), float(T3[2, 3])]
 
         return x, y, z
 
@@ -79,10 +82,14 @@ class Robo:
             to reach a specific point in 3D space.
         """
 
+        for i in range(len(self.joint_angles)):
+            self.joint_angles[i] = float(self.joint_angles[i])
+
         try:
             joint_angles = get_q(np.array([x, y, z]), self.joint_angles)
-        except:
+        except Exception as e:
             print("Error in calculating the inverse kinematics...")
+            print(e.args)
             joint_angles = self.get_joint_angles()
             x, y, z = self.get_xyz_position()
 
@@ -125,6 +132,27 @@ class Robo:
         self.trajectory["si"].append(speed_i)
         self.trajectory["sf"].append(speed_f)
         self.trajectory["time"].append(time)
+
+
+    def run_trajectory(self):
+
+        """
+            Execute created trajectory
+        """
+
+        # Get initial angles of trajectory
+        j1_i = self.trajectory["j1"][0]
+        j2_i = self.trajectory["j2"][0]
+        j3_i = self.trajectory["j3"][0]
+        claw_i = self.trajectory["claw"][0]
+
+        # Move robot to initial angles
+        j1, j2, j3, claw = self.go_to(j1_i, j2_i, j3_i, claw_i, 4)
+        self.move_robot(j1, j2, j3, claw)
+
+        # Execute the trajectory
+        #_, j1, j2, j3, claw = self.get_cubic_trajectory(self.trajectory, 15)
+        self.move_robot(j1, j2, j3, claw)
 
 
     def get_cubic_trajectory(self, trajectory: dict, rate: float):
@@ -177,7 +205,7 @@ class Robo:
         return time, j1, j2, j3, claw
     
 
-    def go_to(self, target_j1: float, target_j2: float, target_j3: float, target_claw: float):
+    def go_to(self, target_j1: float, target_j2: float, target_j3: float, target_claw: float, time: float):
 
         """
             Calculate the trajectory from the current point to another
@@ -192,7 +220,7 @@ class Robo:
 
         trajectory = {
             "j1": [j1, target_j1], "j2": [j2, target_j2], "j3": [j3, target_j3],
-            "si": [0, 0], "sf": [0, 0], "claw": [claw, target_claw], "time": [0, 3]
+            "si": [0, 0], "sf": [0, 0], "claw": [claw, target_claw], "time": [0, time]
         }
 
         # Get trajectory to the specified point
@@ -201,11 +229,21 @@ class Robo:
         return j1, j2, j3, claw
     
 
-    def move_robot(self, j1: list, j2: list, j3: list, claw: list, callback):
+    def __update_params(self, j1: float, j2: float, j3: float, claw: float):
+        self.set_joint_angles(j1, j2, j3)
+        self.set_claw_opening(claw)
+
+    def __move_robot(self, j1: list, j2: list, j3: list, claw: list):
         
         """
             Send commands to Ev3 to execute the trajectory
         """
+
+        while self.get_is_moving(): pass
+
+        self.set_is_moving(True)
+
+        ini = datetime.now()
 
         # Iterates over all points
         for i in range(len(j1)):
@@ -219,13 +257,26 @@ class Robo:
             # )
             
             # Update robot parameters
-            self.set_joint_angles(j1[i], j2[i], j3[i])
-            self.set_claw_opening(claw[i])
+            th = threading.Thread(
+                target=lambda: self.__update_params(j1[i], j2[i], j3[i], claw[i])
+            )
+            th.start()
+            
+            sleep(0.05)
 
-            print("oi")
+        self.set_is_moving(False)
+        print("Finished in:", datetime.now() - ini)
+        print("Number of points:", len(j1))
 
-            #callback()
-            sleep(0.06)
+
+    def move_robot(self, j1: list, j2: list, j3: list, claw: list):
+
+        """
+            Create a thread that send commands to execute the trajectory
+        """
+
+        th = threading.Thread(target=lambda: self.__move_robot(j1, j2, j3, claw))
+        th.start()
     
 
     def get_xyz_position(self):
@@ -234,7 +285,7 @@ class Robo:
     
     def set_xyz_position(self, x: float, y: float, z: float):
         j1, j2, j3 = self.inverse_kinematics(x, y, z)
-        if not (np.isnan(j1) or np.isnan(j2) or np.isnan(j3)):
+        if not (pd.isnull(j1) or pd.isnull(j2) or pd.isnull(j3)):
             self.xyz_position = [x, y, z]
             self.joint_angles = [j1, j2, j3]
             self.all_joints_position = self.forward_kinematics(j1, j2, j3)
@@ -261,6 +312,16 @@ class Robo:
     def set_claw_opening(self, value: float):
         if value <= np.pi/2:
             self.claw_opening = value
+
+
+    def get_is_moving(self):
+        return self.is_moving
+    
+
+    def set_is_moving(self, value: bool):
+        self.is_moving = value
+        return True
     
     def get_all_joints_position(self):
         return self.all_joints_position
+

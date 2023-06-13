@@ -7,6 +7,7 @@ from PyQt5.QtCore import *
 from robo.robo import Robo
 
 # Other libraries
+import threading
 from math import degrees, radians, pi
 from time import sleep
 
@@ -23,7 +24,8 @@ class GuiRobo(QMainWindow):
         self.robot = Robo()
 
         # Initialize simulation plot
-        self.update_simulation()
+        # self.update_simulation()
+        self.mpl_widget.real_time(self.robot.get_all_joints_position)
 
         # Initialize label updater
         self.label_thread_start()
@@ -47,13 +49,17 @@ class GuiRobo(QMainWindow):
 
         # Trajectory
         self.btn_trajectory_add.pressed.connect(self.add_to_trajectory)
+        self.btn_trajectory_run.pressed.connect(self.run_trajectory)
 
         # Inverse kinematics button
         #self.btn_inverse.pressed.connect(self.inverse_movement)
 
-    def update_simulation(self):
-        self.mpl_widget.plot(*self.robot.get_all_joints_position())
 
+    def update_simulation(self):
+        #self.mpl_widget.plot(*self.robot.get_all_joints_position())
+        th = threading.Thread(target=lambda: self.mpl_widget.plot(*self.robot.get_all_joints_position()))
+        th.start()
+        
 
     def add_to_trajectory(self):
 
@@ -68,6 +74,10 @@ class GuiRobo(QMainWindow):
         
         # Increment the time field
         self.dsb_time.setValue(time + 2)
+
+
+    def run_trajectory(self):
+        self.robot.run_trajectory()
 
 
     def joystick(self, button: str):
@@ -90,11 +100,11 @@ class GuiRobo(QMainWindow):
         elif button == "down_z":
             self.robot.set_xyz_position(x, y, z - step)
         elif button == "initial":
-            j1, j2, j3, claw = self.robot.go_to(0, 0, 0, 0)
-            self.robot.move_robot(j1, j2, j3, claw, self.update_simulation)
+            j1, j2, j3, claw = self.robot.go_to(0, 0, 0, 0, 4)
+            self.robot.move_robot(j1, j2, j3, claw)
 
         # Update the simulation
-        self.update_simulation()
+        # self.update_simulation()
 
 
     def joints(self, button: str):
@@ -118,7 +128,7 @@ class GuiRobo(QMainWindow):
             self.robot.set_joint_angles(j1, j2, j3 - step)
    
         # Update the simulation
-        self.update_simulation()
+        # self.update_simulation()
 
 
     def label_thread_start(self):

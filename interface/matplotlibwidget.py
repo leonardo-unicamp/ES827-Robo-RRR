@@ -3,16 +3,30 @@ from PyQt5.QtCore import *
 
 import time
 import matplotlib
+import matplotlib.pyplot as plt
 from matplotlib.figure import Figure
 import matplotlib.dates as mdates
 
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FC
 from matplotlib.backends.backend_qt5agg import (NavigationToolbar2QT as NavigationToolbar)
 
-import numpy as np
-from datetime import datetime, timedelta
-
 matplotlib.use('Qt5Agg')
+
+
+class Animation(QObject):
+    
+    finished = pyqtSignal()
+
+    def __init__(self, plot, function):
+        super().__init__()
+        self.get_points = function
+        self.plot = plot
+
+    def run(self):
+        while True:
+            self.plot(*self.get_points())
+            time.sleep(0.05)
+
 
 class matplotlibwidget(QWidget):
     
@@ -41,8 +55,19 @@ class matplotlibwidget(QWidget):
         self.lines = []
         self.graphs = {}
 
+    def real_time(self, get_points) -> None:
+        self.thread = QThread()
+        self.worker = Animation(self.plot, get_points)
+        self.worker.moveToThread(self.thread)
+        self.thread.started.connect(self.worker.run)
+        self.worker.finished.connect(self.thread.quit)
+        self.worker.finished.connect(self.worker.deleteLater)
+        self.thread.finished.connect(self.thread.deleteLater)
+        self.thread.start()
+
     #
     def plot(self, x: list, y: list, z: list) -> None:
+
         self.x_axis = x
         self.y_axis = y
 
