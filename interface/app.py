@@ -50,9 +50,17 @@ class GuiRobo(QMainWindow):
         # Trajectory
         self.btn_trajectory_add.pressed.connect(self.add_to_trajectory)
         self.btn_trajectory_run.pressed.connect(self.run_trajectory)
+        self.btn_trajectory_remove.pressed.connect(self.remove_trajectory)
+
+        # Claw buttons
+        self.btn_set_claw.pressed.connect(self.set_claw)
 
         # Inverse kinematics button
         #self.btn_inverse.pressed.connect(self.inverse_movement)
+
+    def set_claw(self):
+        claw = self.dsb_claw.value()
+        self.robot.set_claw_opening(claw)
 
 
     def update_simulation(self):
@@ -60,6 +68,11 @@ class GuiRobo(QMainWindow):
         th = threading.Thread(target=lambda: self.mpl_widget.plot(*self.robot.get_all_joints_position()))
         th.start()
         
+
+    def remove_trajectory(self):
+        self.robot.remove_trajectory()
+        self.dsb_time.setValue(0)
+
 
     def add_to_trajectory(self):
 
@@ -100,7 +113,7 @@ class GuiRobo(QMainWindow):
         elif button == "down_z":
             self.robot.set_xyz_position(x, y, z - step)
         elif button == "initial":
-            j1, j2, j3, claw = self.robot.go_to(0, 0, 0, 0, 4)
+            j1, j2, j3, claw = self.robot.go_to(0, 0, 0, 0, 0)
             self.robot.move_robot(j1, j2, j3, claw)
 
         # Update the simulation

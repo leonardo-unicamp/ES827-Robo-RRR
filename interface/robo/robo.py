@@ -34,7 +34,7 @@ class Robo:
         self.transformation_j3 = A1*A2*A3
 
         # Connect with Ev3
-        # self.ev3 = Ev3Client()
+        self.ev3 = Ev3Client()
         self.is_moving = False
 
         # Store a trajectory
@@ -117,6 +117,14 @@ class Robo:
             ]))
         return Hs
     
+
+    def remove_trajectory(self):
+        self.trajectory = {
+            "j1": [], "j2": [], "j3": [],
+            "si": [], "sf": [], "claw": [], "time": []
+        }
+        print("Trajectory reseted!")
+    
     
     def add_to_trajectory(self, speed_i: float, speed_f: float, time: float):
 
@@ -151,7 +159,7 @@ class Robo:
         self.move_robot(j1, j2, j3, claw)
 
         # Execute the trajectory
-        #_, j1, j2, j3, claw = self.get_cubic_trajectory(self.trajectory, 15)
+        _, j1, j2, j3, claw = self.get_cubic_trajectory(self.trajectory, 5)
         self.move_robot(j1, j2, j3, claw)
 
 
@@ -224,14 +232,14 @@ class Robo:
         }
 
         # Get trajectory to the specified point
-        _, j1, j2, j3, claw = self.get_cubic_trajectory(trajectory, 15)
+        _, j1, j2, j3, claw = self.get_cubic_trajectory(trajectory, 5)
 
         return j1, j2, j3, claw
     
 
     def __update_params(self, j1: float, j2: float, j3: float, claw: float):
         self.set_joint_angles(j1, j2, j3)
-        self.set_claw_opening(claw)
+        #self.set_claw_opening(degrees(claw))
 
     def __move_robot(self, j1: list, j2: list, j3: list, claw: list):
         
@@ -249,12 +257,12 @@ class Robo:
         for i in range(len(j1)):
 
             # Set position to Ev3 motors
-            # self.ev3.set_position(
-            #   degrees(j1[i]), 
-            #   degrees(j2[i]), 
-            #   degrees(j3[i]), 
-            #   degrees(claw[i])
-            # )
+            self.ev3.set_position(
+              degrees(j1[i]), 
+              degrees(-j2[i]), 
+              degrees(-j3[i]), 
+              degrees(claw[i])
+            )
             
             # Update robot parameters
             th = threading.Thread(
@@ -286,9 +294,11 @@ class Robo:
     def set_xyz_position(self, x: float, y: float, z: float):
         j1, j2, j3 = self.inverse_kinematics(x, y, z)
         if not (pd.isnull(j1) or pd.isnull(j2) or pd.isnull(j3)):
+            claw = self.get_claw_opening()
             self.xyz_position = [x, y, z]
             self.joint_angles = [j1, j2, j3]
             self.all_joints_position = self.forward_kinematics(j1, j2, j3)
+            self.ev3.set_position(degrees(j1), -degrees(j2), -degrees(j3), claw)
             return True
         return False
     
@@ -310,8 +320,9 @@ class Robo:
     
 
     def set_claw_opening(self, value: float):
-        if value <= np.pi/2:
-            self.claw_opening = value
+        self.claw_opening = value
+        j1, j2, j3 = self.get_joint_angles()
+        self.ev3.set_position(degrees(j1), -degrees(j2), -degrees(j3), self.claw_opening)
 
 
     def get_is_moving(self):
