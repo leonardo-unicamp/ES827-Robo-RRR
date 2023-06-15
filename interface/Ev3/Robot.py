@@ -4,6 +4,7 @@
 from ev3dev2.motor import (OUTPUT_A, OUTPUT_B, OUTPUT_C, OUTPUT_D, LargeMotor,MediumMotor,
                            Motor, SpeedDPS, SpeedPercent)
 
+delta_angle = .5
 
 class ReducedMotor:
     def __init__(self, motor, reduction):
@@ -22,6 +23,9 @@ class ReducedMotor:
 
     def set_position(self, pos):
         self.motor.position = pos* self.reduction
+
+    def get_position(self):
+        return self.motor.position / self.reduction
 
 
 class Robot:
@@ -48,12 +52,16 @@ class Robot:
     
 
     def move(self, q1, q2, q3, q4):
-        self.base.on_to_position(SpeedPercent(100), q1, block=False)
-        self.shoulder.on_to_position(SpeedPercent(10), q2, block=False)
-        self.elbow.on_to_position(SpeedPercent(40), q3, block=False)
-        self.claw.on_to_position(SpeedPercent(20), q4, block=False)
-        pass
-        # print(q1, q2, q3, q4)
+        q2 = -q2
+        q3 = -q3
+        if abs(self.base.get_position() - q1)>delta_angle:
+            self.base.on_to_position(SpeedPercent(100), q1, block=False)
+        if abs(self.shoulder.get_position() - q2)>delta_angle:
+            self.shoulder.on_to_position(SpeedPercent(10), q2, block=False)
+        if abs(self.elbow.get_position() - q3)>delta_angle:
+            self.elbow.on_to_position(SpeedPercent(40), q3, block=False)
+        if abs(self.claw.get_position() - q4)>delta_angle:
+            self.claw.on_to_position(SpeedPercent(20), q4, block=False)
 
 
 def main():
