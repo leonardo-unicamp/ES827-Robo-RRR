@@ -2,7 +2,7 @@ import socket
 
 class Ev3Client:
 
-    def __init__(self, host: str = "169.254.91.23", port: int = 12345):
+    def __init__(self, host: str, port: int = 12345):
         self.host = host
         self.port = port
         self.client = self.connect()
