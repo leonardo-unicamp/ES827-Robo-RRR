@@ -25,7 +25,7 @@ class Animation(QObject):
     def run(self):
         while True:
             self.plot(*self.get_points())
-            time.sleep(0.05)
+            time.sleep(0.02)
 
 
 class matplotlibwidget(QWidget):

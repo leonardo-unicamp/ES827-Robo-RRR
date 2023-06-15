@@ -2,7 +2,7 @@ import socket
 
 class Ev3Client:
 
-    def __init__(self, host: str = "169.254.91.23", port: int = 12345):
+    def __init__(self, host: str = "169.254.170.168", port: int = 12345):
         self.host = host
         self.port = port
         self.client = self.connect()
@@ -20,7 +20,7 @@ class Ev3Client:
     def set_position(self, j1, j2, j3, j4):
 
         try:
-            msg = f"#{j1};{-j2};{-j3};{j4}".encode("ASCII")
+            msg = f"#{j1};{j2};{j3};{j4}".encode("ASCII")
             self.client.sendall(msg)
         except:
             print(f"Error: was not possible send the point to Ev3")

@@ -1,6 +1,7 @@
 # Libraries
 import numpy as np
 import threading as th
+from datetime import datetime
 
 # Robot communication
 from robot_math.DH import DH
@@ -75,7 +76,7 @@ class RobotControl:
         self.ev3.set_position(*joints_in_degrees)
 
 
-    def __thread_move_robot(self, j1: tuple, j2: tuple, j3: tuple, j4: tuple) -> None:
+    def __thread_move_robot(self, j1: tuple, j2: tuple, j3: tuple, j4: tuple, time: tuple) -> None:
 
         """ Send commands to Ev3 to execute an trajectory """
 
@@ -86,24 +87,31 @@ class RobotControl:
         # It's available execute the movement
         self.set_is_moving(True)
 
+        # Get initial datetime
+        ini = now = datetime.now()
+
         # Iterates over all points, set and update
         for i in range(len(j1)):
+
+            # Wait for the correct time to send the point
+            while (now-ini).total_seconds() < time[i]:
+                now = datetime.now()
+
             joints = (j1[i], j2[i], j3[i], j4[i])
             self.ev3_set_position(*joints)
             updater = th.Thread(target=lambda: self.set_joint_angles(*joints))
             updater.start()
-            sleep(0.03)
 
         # Movement finished
         self.set_is_moving(False)
         print("Movement finished.")
 
     
-    def move_robot(self, j1: tuple, j2: tuple, j3: tuple, j4: tuple) -> None:
+    def move_robot(self, j1: tuple, j2: tuple, j3: tuple, j4: tuple, time: tuple) -> None:
 
         """ Create a thread that send commands to execute the trajectory """
 
-        sender = th.Thread(target=lambda: self.__thread_move_robot(j1, j2, j3, j4))
+        sender = th.Thread(target=lambda: self.__thread_move_robot(j1, j2, j3, j4, time))
         sender.start()
 
 
@@ -118,10 +126,10 @@ class RobotControl:
         j1, j2, j3, j4 = self.get_joint_angles()
 
         # Get the trajectory
-        _, j1, j2, j3, j4 = self.__trajectory.go_to((j1, target_j1), (j2, target_j2),
+        time, j1, j2, j3, j4 = self.__trajectory.go_to((j1, target_j1), (j2, target_j2),
                                                     (j3, target_j3), (j4, target_j4), time)
 
-        self.move_robot(j1, j2, j3, j4)
+        self.move_robot(j1, j2, j3, j4, time)
 
     
     # Trajectory function
@@ -144,8 +152,8 @@ class RobotControl:
             self.go_to(j1, j2, j3, j4, 2)
 
             # Execute the trajectory (5 points per second)
-            _, j1, j2, j3, j4 = self.__trajectory.cubic(5)
-            self.move_robot(j1, j2, j3, j4)
+            time, j1, j2, j3, j4 = self.__trajectory.cubic(10)
+            self.move_robot(j1, j2, j3, j4, time)
         else:
             print("None trajectory created!")
 
@@ -266,5 +274,5 @@ class RobotTrajectory:
             "si": [0, 0], "sf": [0, 0], "time": [0, time]
         }
 
-        return self.cubic(5, trajectory)
+        return self.cubic(10, trajectory)
     

@@ -24,7 +24,6 @@ class GuiRobo(QMainWindow):
         self.robot = RobotControl()
 
         # Initialize simulation plot
-        # self.update_simulation()
         self.mpl_widget.real_time(self.robot.get_all_joints_position)
 
         # Initialize label updater
@@ -100,7 +99,8 @@ class GuiRobo(QMainWindow):
 
     def joystick(self, button: str):
 
-        step = 10    # Step in milimetters
+        # Step in milimetters
+        step = 5
 
         # Get the current position
         x, y, z = self.robot.get_manipulator_position()
@@ -120,13 +120,10 @@ class GuiRobo(QMainWindow):
         elif button == "initial":
             self.robot.go_to(0, 0, 0, 0, 5)
 
-        # Update the simulation
-        # self.update_simulation()
-
 
     def joints(self, button: str):
 
-        step = radians(10)   # Step in radians
+        step = radians(5)   # Step in radians
 
         # Get the current joints
         j1, j2, j3, j4 = self.robot.get_joint_angles()
@@ -143,9 +140,6 @@ class GuiRobo(QMainWindow):
             self.robot.set_joint_angles(j1, j2, j3 + step, j4)
         elif button == "down_j3" and -2*pi < j3 < 2*pi:
             self.robot.set_joint_angles(j1, j2, j3 - step, j4)
-   
-        # Update the simulation
-        # self.update_simulation()
 
 
     def label_thread_start(self):
