@@ -4,7 +4,6 @@ import numpy as np
 import pandas as pd
 import scipy as sp
 from scipy.optimize import least_squares
-from robot_math.calc import get_q
 import sympy as sym
 
 b1 = np.arctan(148 / 28)
