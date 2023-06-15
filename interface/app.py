@@ -4,7 +4,7 @@ from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 
 # Robot libraries
-from robo.robo import Robo
+from robot_control.control import RobotControl
 
 # Other libraries
 import threading
@@ -21,7 +21,7 @@ class GuiRobo(QMainWindow):
         self.setWindowTitle("Controlador do Robô")
         
         # Initialize the robot
-        self.robot = Robo()
+        self.robot = RobotControl()
 
         # Initialize simulation plot
         # self.update_simulation()
@@ -59,8 +59,9 @@ class GuiRobo(QMainWindow):
         #self.btn_inverse.pressed.connect(self.inverse_movement)
 
     def set_claw(self):
-        claw = self.dsb_claw.value()
-        self.robot.set_claw_opening(claw)
+        j1, j2, j3, _ = self.robot.get_joint_angles()
+        j4 = self.dsb_claw.value()
+        self.robot.set_joint_angles(j1, j2, j3, j4)
 
 
     def update_simulation(self):

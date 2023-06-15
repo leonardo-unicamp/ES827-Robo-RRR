@@ -71,7 +71,8 @@ class DH:
         # self.last_pos = Expr(d(self.A_0_i[-1].symbolic), joints)
 
     def fw_kinematics(self, joints):
-        return np.array([[0,0,0]]+[d(Ai(joints)) for Ai in self.A_0_i])
+        all_joints = np.array([[0,0,0]]+[d(Ai(joints)) for Ai in self.A_0_i])
+        return (all_joints[:,0], all_joints[:,1], all_joints[:,2])
 
     def bw_kinematics(self, target, last_pos):
         a = sp.optimize.least_squares(lambda x: target - self.last_pos(x), last_pos)
@@ -128,3 +129,5 @@ if __name__ == "__main__":
 # %%
 dh = DH()
 dh.fw_kinematics((0,0,0))
+print(dh.fw_kinematics((0,0,0)))
+# %%

@@ -1,33 +1,33 @@
 import socket
-from time import sleep, time
 
+class Ev3Client:
 
-def echo_client(host, port, msg):
-    client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    def __init__(self, host: str = "169.254.21.9", port: int = 12345):
+        self.host = host
+        self.port = port
+        self.client = self.connect()
 
-    try:
-        client_socket.connect((host, port))
-        print("Connected to the server {}:{}".format(host, port))
+    def connect(self):
+        client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        try:
+            client.connect((self.host, self.port))
+            print(f"Connected to the server {self.host}:{self.port}")
+            return client
+        except ConnectionRefusedError:
+            print(f"Error: was not possible connect to {self.host}:{self.port}")
+            return None
 
-        
-        while True:
-            value = input()
-            msg = f"#{value};0;0;0".encode("ASCII")
-            # sleep(0.06)
-            client_socket.sendall(msg)
+    def set_position(self, j1, j2, j3, j4):
 
+        try:
+            msg = f"#{j1};{j2};{j3};{j4}".encode("ASCII")
+            self.client.sendall(msg)
+        except:
+            print(f"Error: was not possible send the point to Ev3")
 
-    except ConnectionRefusedError:
-        print("Error: Connection refused.")
-
-    finally:
-        # Close the client socket
-        client_socket.close()
-
+    def close(self):
+        self.client.close()
 
 if __name__ == "__main__":
-    host = "localhost"
-    host = "10.42.0.3"
-    port = 12345
-    msg = b"#1;2;3;4"
-    echo_client(host, port, msg)
+    ev3 = Ev3Client()
+    ev3.set_position(0,-10,20,-150)
