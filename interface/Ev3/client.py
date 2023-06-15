@@ -20,7 +20,7 @@ class Ev3Client:
     def set_position(self, j1, j2, j3, j4):
 
         try:
-            msg = f"#{j1};{j2};{j3};{j4}".encode("ASCII")
+            msg = f"#{j1};{-j2};{-j3};{j4}".encode("ASCII")
             self.client.sendall(msg)
         except:
             print(f"Error: was not possible send the point to Ev3")

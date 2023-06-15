@@ -92,7 +92,7 @@ class RobotControl:
             self.ev3_set_position(*joints)
             updater = th.Thread(target=lambda: self.set_joint_angles(*joints))
             updater.start()
-            sleep()
+            sleep(0.1)
 
         # Movement finished
         self.set_is_moving(False)
@@ -203,21 +203,24 @@ class RobotTrajectory:
         return (j1, j2, j3, j4)
 
 
-    def cubic(self, rate: float) -> tuple:
+    def cubic(self, rate: float, trajectory = None) -> tuple:
         
         """ Computes a cubic trajectory of all points """
+
+        if trajectory == None:
+            trajectory = self.trajectory
 
         time = []
         j1, j2, j3, j4 = [], [], [], []
 
         # Iterates over all points
-        for i in range(1, len(self.trajectory["j1"])):
+        for i in range(1, len(trajectory["j1"])):
 
-            # Time to execute the self.trajectory
-            ti, tf = self.trajectory["time"][i-1], self.trajectory["time"][i]
+            # Time to execute the trajectory
+            ti, tf = trajectory["time"][i-1], trajectory["time"][i]
 
             # Speed in target points
-            si, sf =  self.trajectory["si"][i], self.trajectory["sf"][i]
+            si, sf =  trajectory["si"][i], trajectory["sf"][i]
 
             # Compute the time list
             t = np.linspace(ti, tf, int((tf - ti)*rate))
@@ -233,12 +236,12 @@ class RobotTrajectory:
             for key in ["j1", "j2", "j3", "j4"]:
 
                 # Move points
-                qi = self.trajectory[key][i-1]
-                qf = self.trajectory[key][i]
+                qi = trajectory[key][i-1]
+                qf = trajectory[key][i]
 
                 # Create the cubic self.trajectory
-                self.trajectory_matrix = np.array([qi, si, qf, sf])
-                a0, a1, a2, a3 = list(timeMatrix @ self.trajectory_matrix)
+                trajectory_matrix = np.array([qi, si, qf, sf])
+                a0, a1, a2, a3 = list(timeMatrix @ trajectory_matrix)
 
                 if key == "j1":
                     j1 += list(a0 + a1*t + a2*(t**2) + a3*(t**3))
@@ -246,7 +249,7 @@ class RobotTrajectory:
                     j2 += list(a0 + a1*t + a2*(t**2) + a3*(t**3))
                 elif key == "j3":
                     j3 += list(a0 + a1*t + a2*(t**2) + a3*(t**3))
-                elif key == "claw":
+                elif key == "j4":
                     j4 += list(a0 + a1*t + a2*(t**2) + a3*(t**3))
 
         return time, j1, j2, j3, j4
@@ -263,5 +266,5 @@ class RobotTrajectory:
             "si": [0, 0], "sf": [0, 0], "time": [0, time]
         }
 
-        return self.cubic(trajectory, 10)
+        return self.cubic(10, trajectory)
     
