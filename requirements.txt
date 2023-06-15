@@ -1,0 +1,10 @@
+# Math
+numpy
+scipy
+sympy
+
+PyQt5
+matplotlib
+pandas
+
+black
