@@ -12,6 +12,8 @@ from time import sleep
 from math import degrees, radians
 from pandas import isnull
 
+from env import HOST
+
 class RobotControl:
 
 
@@ -21,7 +23,7 @@ class RobotControl:
         self.calculate = DH()
 
         # Connection with Ev3
-        self.ev3 = Ev3Client()
+        self.ev3 = Ev3Client(host=HOST)
 
         # Robot Trajectory
         self.__trajectory = RobotTrajectory()
