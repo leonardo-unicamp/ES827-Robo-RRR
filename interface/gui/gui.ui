@@ -432,7 +432,7 @@
       <string>Tempo (s)</string>
      </property>
     </widget>
-    <widget class="QTextBrowser" name="browser_trajectory">
+    <widget class="QTextBrowser" name="browser">
      <property name="geometry">
       <rect>
        <x>10</x>

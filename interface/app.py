@@ -72,6 +72,7 @@ class GuiRobo(QMainWindow):
 
     def remove_trajectory(self):
         self.robot.remove_trajectory()
+        self.browser.append("Trajectory reseted!")
         self.dsb_time.setValue(0)
 
 
@@ -87,6 +88,10 @@ class GuiRobo(QMainWindow):
         
         # Increment the time field
         self.dsb_time.setValue(time + 2)
+
+        # Log info into browser
+        x, y, z = self.robot.get_manipulator_position()
+        self.browser.append("Point (%.2f, %.2f, %.2f) added." % (x, y, z))
 
 
     def run_trajectory(self):

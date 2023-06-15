@@ -20,7 +20,7 @@ class RobotControl:
         self.calculate = DH()
 
         # Connection with Ev3
-        # self.ev3 = Ev3Client()
+        self.ev3 = Ev3Client()
 
         # Robot Trajectory
         self.__trajectory = RobotTrajectory()
@@ -69,10 +69,10 @@ class RobotControl:
         """ Set a value in degrees to Ev3 motors """
 
         # Convert all joints to degrees
-        joints_in_degrees = [degrees(j1), degrees(j2), degrees(j3), degrees(j4)]
+        joints_in_degrees = [degrees(j1), degrees(j2), degrees(j3), j4]
 
         # Set position to Ev3 motors
-        # self.ev3.set_position(*joints_in_degrees)
+        self.ev3.set_position(*joints_in_degrees)
 
 
     def __thread_move_robot(self, j1: tuple, j2: tuple, j3: tuple, j4: tuple) -> None:
@@ -92,7 +92,7 @@ class RobotControl:
             self.ev3_set_position(*joints)
             updater = th.Thread(target=lambda: self.set_joint_angles(*joints))
             updater.start()
-            sleep(0.1)
+            sleep(0.03)
 
         # Movement finished
         self.set_is_moving(False)
@@ -141,10 +141,10 @@ class RobotControl:
             j1, j2, j3, j4 = self.__trajectory.initial_point()
 
             # Move the robot to the initial point of trajectory
-            self.go_to(j1, j2, j3, j4, 5)
+            self.go_to(j1, j2, j3, j4, 2)
 
-            # Execute the trajectory (10 points per second)
-            _, j1, j2, j3, j4 = self.__trajectory.cubic(10)
+            # Execute the trajectory (5 points per second)
+            _, j1, j2, j3, j4 = self.__trajectory.cubic(5)
             self.move_robot(j1, j2, j3, j4)
         else:
             print("None trajectory created!")
@@ -266,5 +266,5 @@ class RobotTrajectory:
             "si": [0, 0], "sf": [0, 0], "time": [0, time]
         }
 
-        return self.cubic(10, trajectory)
+        return self.cubic(5, trajectory)
     
