@@ -84,7 +84,6 @@ class GuiRobo(QMainWindow):
 
         # Add the current point to trajectory
         self.robot.add_to_trajectory(speed_i, speed_f, time)
-        print(self.robot.trajectory)
         
         # Increment the time field
         self.dsb_time.setValue(time + 2)
@@ -99,23 +98,22 @@ class GuiRobo(QMainWindow):
         step = 10    # Step in milimetters
 
         # Get the current position
-        x, y, z = self.robot.get_xyz_position()
+        x, y, z = self.robot.get_manipulator_position()
 
         if button == "up":
-            self.robot.set_xyz_position(x, y + step, z)
+            self.robot.set_manipulator_position(x, y + step, z)
         elif button == "down":
-            self.robot.set_xyz_position(x, y - step, z)
+            self.robot.set_manipulator_position(x, y - step, z)
         elif button == "right":
-            self.robot.set_xyz_position(x + step, y, z)
+            self.robot.set_manipulator_position(x + step, y, z)
         elif button == "left":
-            self.robot.set_xyz_position(x - step, y, z)
+            self.robot.set_manipulator_position(x - step, y, z)
         elif button == "up_z":
-            self.robot.set_xyz_position(x, y, z + step)
+            self.robot.set_manipulator_position(x, y, z + step)
         elif button == "down_z":
-            self.robot.set_xyz_position(x, y, z - step)
+            self.robot.set_manipulator_position(x, y, z - step)
         elif button == "initial":
-            j1, j2, j3, claw = self.robot.go_to(0, 0, 0, 0, 0)
-            self.robot.move_robot(j1, j2, j3, claw)
+            self.robot.go_to(0, 0, 0, 0, 5)
 
         # Update the simulation
         # self.update_simulation()
@@ -126,20 +124,20 @@ class GuiRobo(QMainWindow):
         step = radians(10)   # Step in radians
 
         # Get the current joints
-        j1, j2, j3 = self.robot.get_joint_angles()
+        j1, j2, j3, j4 = self.robot.get_joint_angles()
 
         if button == "up_j1" and -2*pi < j1 < 2*pi:
-            self.robot.set_joint_angles(j1 + step, j2, j3)
+            self.robot.set_joint_angles(j1 + step, j2, j3, j4)
         elif button == "down_j1" and -2*pi < j1 < 2*pi:
-            self.robot.set_joint_angles(j1 - step, j2, j3)
+            self.robot.set_joint_angles(j1 - step, j2, j3, j4)
         if button == "up_j2" and -2*pi < j2 < 2*pi:
-            self.robot.set_joint_angles(j1, j2 + step, j3)
+            self.robot.set_joint_angles(j1, j2 + step, j3, j4)
         elif button == "down_j2" and -2*pi < j2 < 2*pi:
-            self.robot.set_joint_angles(j1, j2 - step, j3)
+            self.robot.set_joint_angles(j1, j2 - step, j3, j4)
         if button == "up_j3" and -2*pi < j3 < 2*pi:
-            self.robot.set_joint_angles(j1, j2, j3 + step)
+            self.robot.set_joint_angles(j1, j2, j3 + step, j4)
         elif button == "down_j3" and -2*pi < j3 < 2*pi:
-            self.robot.set_joint_angles(j1, j2, j3 - step)
+            self.robot.set_joint_angles(j1, j2, j3 - step, j4)
    
         # Update the simulation
         # self.update_simulation()
@@ -163,20 +161,17 @@ class LabelUpdater(QObject):
         while True:
 
             # Update (x,y,z) manipulator position
-            x, y, z = self.gui.robot.get_xyz_position()
+            x, y, z = self.gui.robot.get_manipulator_position()
             self.gui.lb_x.setText("%.2f" % x)
             self.gui.lb_y.setText("%.2f" % y)
             self.gui.lb_z.setText("%.2f" % z)
 
             # Update joints angles
-            j1, j2, j3 = self.gui.robot.get_joint_angles()
+            j1, j2, j3, j4 = self.gui.robot.get_joint_angles()
             self.gui.lb_j1.setText("%.1f°" % degrees(j1))
             self.gui.lb_j2.setText("%.1f°" % degrees(j2))
             self.gui.lb_j3.setText("%.1f°" % degrees(j3))
-
-            # Update claw opening
-            claw = self.gui.robot.get_claw_opening()
-            self.gui.lb_claw.setText("%.1f°" % claw)
+            self.gui.lb_claw.setText("%.1f°" % j4)
 
             sleep(0.5)
 

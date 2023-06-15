@@ -56,7 +56,7 @@ class RobotControl:
         _, _, _, j4 = self.get_joint_angles()
         j1, j2, j3 = self.calculate.bw_kinematics(
                         target=(x, y, z),
-                        last_pos=self.get_manipulator_position())
+                        last_pos=self.get_joint_angles()[:3])
         if not (isnull(j1) or isnull(j2) or isnull(j3)):
             self.__joint_angles         = (j1, j2, j3, j4)
             self.__all_joints_position  = self.calculate.fw_kinematics((j1, j2, j3))
@@ -126,7 +126,9 @@ class RobotControl:
     
     # Trajectory function
     def remove_trajectory(self): self.__trajectory.remove_all()
-    def add_trajectory(self):    self.__trajectory.add_point() #TO DO
+    def add_to_trajectory(self, si: float, sf: float, time: float):
+        joints = self.get_joint_angles()
+        self.__trajectory.add_point(joints, si, sf, time)
 
 
     def run_trajectory(self):

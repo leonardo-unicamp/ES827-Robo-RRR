@@ -3,6 +3,8 @@
 import numpy as np
 import pandas as pd
 import scipy as sp
+from scipy.optimize import least_squares
+from robot_math.calc import get_q
 import sympy as sym
 
 b1 = np.arctan(148 / 28)
@@ -75,7 +77,7 @@ class DH:
         return (all_joints[:,0], all_joints[:,1], all_joints[:,2])
 
     def bw_kinematics(self, target, last_pos):
-        a = sp.optimize.least_squares(lambda x: target - self.last_pos(x), last_pos)
+        a = least_squares(lambda x: target - self.last_pos(x), last_pos)
         return a.x
 
     def last_pos(self, joints):
@@ -129,5 +131,4 @@ if __name__ == "__main__":
 # %%
 dh = DH()
 dh.fw_kinematics((0,0,0))
-print(dh.fw_kinematics((0,0,0)))
 # %%
