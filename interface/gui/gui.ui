@@ -438,7 +438,7 @@
        <x>10</x>
        <y>135</y>
        <width>226</width>
-       <height>111</height>
+       <height>61</height>
       </rect>
      </property>
     </widget>
@@ -446,8 +446,8 @@
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>255</y>
-       <width>76</width>
+       <y>200</y>
+       <width>111</width>
        <height>31</height>
       </rect>
      </property>
@@ -458,9 +458,9 @@
     <widget class="QPushButton" name="btn_trajectory_run">
      <property name="geometry">
       <rect>
-       <x>90</x>
-       <y>255</y>
-       <width>71</width>
+       <x>130</x>
+       <y>200</y>
+       <width>106</width>
        <height>31</height>
       </rect>
      </property>
@@ -498,17 +498,53 @@
       </rect>
      </property>
     </widget>
-    <widget class="QPushButton" name="btn_trajectory_run_2">
+    <widget class="QPushButton" name="btn_trajectory_save">
      <property name="geometry">
       <rect>
-       <x>165</x>
-       <y>255</y>
-       <width>71</width>
+       <x>180</x>
+       <y>260</y>
+       <width>56</width>
        <height>31</height>
       </rect>
      </property>
      <property name="text">
       <string>Salvar</string>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="le_trajectory_name">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>260</y>
+       <width>106</width>
+       <height>31</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_7">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>240</y>
+       <width>96</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Nome da Trajetória</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="btn_trajectory_load">
+     <property name="geometry">
+      <rect>
+       <x>120</x>
+       <y>260</y>
+       <width>56</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Carreg.</string>
      </property>
     </widget>
    </widget>

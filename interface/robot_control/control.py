@@ -23,7 +23,7 @@ class RobotControl:
         self.calculate = DH()
 
         # Connection with Ev3
-        self.ev3 = Ev3Client(host=HOST)
+        #self.ev3 = Ev3Client(host=HOST)
 
         # Robot Trajectory
         self.__trajectory = RobotTrajectory()
@@ -75,7 +75,7 @@ class RobotControl:
         joints_in_degrees = [degrees(j1), degrees(j2), degrees(j3), j4]
 
         # Set position to Ev3 motors
-        self.ev3.set_position(*joints_in_degrees)
+        #self.ev3.set_position(*joints_in_degrees)
 
 
     def __thread_move_robot(self, j1: tuple, j2: tuple, j3: tuple, j4: tuple, time: tuple) -> None:

@@ -50,6 +50,8 @@ class GuiRobo(QMainWindow):
         self.btn_trajectory_add.pressed.connect(self.add_to_trajectory)
         self.btn_trajectory_run.pressed.connect(self.run_trajectory)
         self.btn_trajectory_remove.pressed.connect(self.remove_trajectory)
+        self.btn_trajectory_save.pressed.connect(self.save_trajectory)
+        self.btn_trajectory_load.pressed.connect(self.load_trajectory)
 
         # Claw buttons
         self.btn_set_claw.pressed.connect(self.set_claw)
@@ -64,10 +66,23 @@ class GuiRobo(QMainWindow):
 
 
     def update_simulation(self):
-        #self.mpl_widget.plot(*self.robot.get_all_joints_position())
         th = threading.Thread(target=lambda: self.mpl_widget.plot(*self.robot.get_all_joints_position()))
         th.start()
-        
+
+
+    def save_trajectory(self):
+        name = self.le_trajectory_name.text()
+        if name != "":
+            if self.robot.save_trajectory(name):
+                self.browser.append("Trajectory %s saved!" % name)
+
+
+    def load_trajectory(self):
+        name = self.le_trajectory_name.text()
+        if name != "":
+            if self.robot.load_trajectory(name):
+             self.browser.append("Trajectory %s loaded!" % name)
+
 
     def remove_trajectory(self):
         self.robot.remove_trajectory()
