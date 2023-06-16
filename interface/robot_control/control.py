@@ -1,6 +1,7 @@
 # Libraries
 import numpy as np
 import threading as th
+import pandas as pd
 from datetime import datetime
 
 # Robot communication
@@ -159,6 +160,12 @@ class RobotControl:
         else:
             print("None trajectory created!")
 
+    def save_trajectory(self, file_name: str):
+        self.__trajectory.save_trajectory(file_name=file_name)
+
+    def load_trajcetory(self, filename: str):
+        return self.__trajectory.load_trajcetory(filename=filename)
+
     
 class RobotTrajectory:
 
@@ -170,7 +177,22 @@ class RobotTrajectory:
             "si": [], "sf": [], "time": []
         }
 
-    
+    def save_trajectory(self, file_name: str):
+        pd.DataFrame(self.trajectory).to_csv(file_name, index=False)
+
+    def load_trajcetory(self, filename: str):
+        new_trajectory = {}
+        try:
+            df = pd.read_csv("a.csv")
+
+        except FileNotFoundError:
+            return False
+        for column in df.columns:
+            new_trajectory[column] = np.array(df[column])
+
+        self.trajectory = new_trajectory
+        return True
+
     def is_empty(self):
 
         """ Check if a trajectory is empty """
