@@ -24,7 +24,7 @@ class RobotControl:
         self.calculate = DH()
 
         # Connection with Ev3
-        #self.ev3 = Ev3Client(host=HOST)
+        self.ev3 = Ev3Client(host=HOST)
 
         # Robot Trajectory
         self.__trajectory = RobotTrajectory()
@@ -76,7 +76,7 @@ class RobotControl:
         joints_in_degrees = [degrees(j1), degrees(j2), degrees(j3), j4]
 
         # Set position to Ev3 motors
-        #self.ev3.set_position(*joints_in_degrees)
+        self.ev3.set_position(*joints_in_degrees)
 
 
     def __thread_move_robot(self, j1: tuple, j2: tuple, j3: tuple, j4: tuple, time: tuple) -> None:
@@ -161,10 +161,10 @@ class RobotControl:
             print("None trajectory created!")
 
     def save_trajectory(self, file_name: str):
-        self.__trajectory.save_trajectory(file_name=file_name)
+        return self.__trajectory.save_trajectory(file_name=file_name)
 
-    def load_trajcetory(self, filename: str):
-        return self.__trajectory.load_trajcetory(filename=filename)
+    def load_trajectory(self, filename: str):
+        return self.__trajectory.load_trajectory(filename=filename)
 
     
 class RobotTrajectory:
@@ -179,11 +179,12 @@ class RobotTrajectory:
 
     def save_trajectory(self, file_name: str):
         pd.DataFrame(self.trajectory).to_csv(file_name, index=False)
+        return True
 
-    def load_trajcetory(self, filename: str):
+    def load_trajectory(self, filename: str):
         new_trajectory = {}
         try:
-            df = pd.read_csv("a.csv")
+            df = pd.read_csv(filename)
 
         except FileNotFoundError:
             return False

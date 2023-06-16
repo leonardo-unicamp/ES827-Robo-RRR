@@ -5,8 +5,7 @@ from time import time
 from Com import Com
 from Robot import Robot
 
-from env import HOST
-
+HOST = "169.254.196.165"
 PORT = 12345
 
 

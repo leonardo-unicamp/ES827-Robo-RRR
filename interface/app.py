@@ -81,7 +81,7 @@ class GuiRobo(QMainWindow):
         name = self.le_trajectory_name.text()
         if name != "":
             if self.robot.load_trajectory(name):
-             self.browser.append("Trajectory %s loaded!" % name)
+                self.browser.append("Trajectory %s loaded!" % name)
 
 
     def remove_trajectory(self):
@@ -138,7 +138,7 @@ class GuiRobo(QMainWindow):
 
     def joints(self, button: str):
 
-        step = radians(5)   # Step in radians
+        step = radians(2)   # Step in radians
 
         # Get the current joints
         j1, j2, j3, j4 = self.robot.get_joint_angles()
